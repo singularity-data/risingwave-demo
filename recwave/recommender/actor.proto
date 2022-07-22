@@ -1,0 +1,41 @@
+syntax = "proto3";
+package recommender;
+
+//get_recommendation:
+//    request: userid String
+//    response: list[itemid String] (MVP: mock response)
+//
+// Arc Clone Lock
+//
+//interact:
+//    request: userid String, itemid String, action ActionType
+//    response: timestamp (MVP: log output --> Step I: Kafka to RW)
+
+service Recommender {
+    rpc GetRecommendation(GetRecommendationRequest) returns (GetRecommendationResponse) {}
+    rpc ReportAction(ReportActionRequest) returns (ReportActionResponse) {}
+}
+
+message ReportActionRequest {
+    string userid = 1;
+    string itemid = 2;
+    ActionType action = 3;
+}
+
+message ReportActionResponse {
+    uint64 timestamp = 1;
+}
+
+message GetRecommendationRequest {
+    string userid = 1;
+}
+
+message GetRecommendationResponse {
+    repeated string itemid = 1;
+}
+
+enum ActionType {
+    VIEW = 0;
+    CLICK = 1;
+    PURCHASE = 2;
+}
